@@ -1,18 +1,5 @@
-import { LoadFacebookUserApi } from "@/data/contracts/apis"
 import { FacebookAuthenticationService } from "@/data/services"
 import { AuthenticationError } from "@/domain/errors"
-
-class LoadFacebookUserApiSpy implements LoadFacebookUserApi {
-    token?: string
-    callsCount = 0
-    result = undefined
-
-    async loadUser (params: LoadFacebookUserApi.Params): Promise<LoadFacebookUserApi.Result> {
-        this.token = params.token
-        this.callsCount++
-        return this.result
-    }
-}
 
 describe('FacebookAuthenticationService', () => {
     it('should call LoadFacebookUserApi with correct params', async () => {
