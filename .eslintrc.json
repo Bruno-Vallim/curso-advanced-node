@@ -8,6 +8,8 @@
         "@typescript-eslint/indent": "off",
         "eol-last": "off",
         "@typescript-eslint/quotes": "off",
+        "@typescript-eslint/space-before-function-paren": "off",
+        "@typescript-eslint/lines-between-class-members": "off",
         "@typescript-eslint/no-namespace": "off"
     }
 }
