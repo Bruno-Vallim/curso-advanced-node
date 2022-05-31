@@ -1,5 +1,5 @@
-import { FacebookApi } from "@/infras/apis"
-import { HttpGetClient } from "@/infras/http"
+import { FacebookApi } from "@/infra/apis"
+import { HttpGetClient } from "@/infra/http"
 
 import { mock, MockProxy } from "jest-mock-extended"
 
