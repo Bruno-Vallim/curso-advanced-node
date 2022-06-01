@@ -42,4 +42,11 @@ it("should return a token", async () => {
 
     expect(token).toEqual('any_token')
 })
+it('should rethrow if sign throws', async () => {
+    fakeJwt.sign.mockImplementationOnce(() => { throw new Error('token_error') })
+
+    const promise = sut.generateToken({ key: "any_key", expirationInMs: 1000 })
+
+    await expect(promise).rejects.toThrow(new Error('token_error'))
+})
 })
