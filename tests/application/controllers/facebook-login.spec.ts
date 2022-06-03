@@ -2,7 +2,7 @@ import { AuthenticationError } from "@/domain/errors"
 import { FacebookAuthentication } from "@/domain/features"
 import { AccessToken } from "@/domain/models"
 import { mock, MockProxy } from "jest-mock-extended"
-import { RequiredFieldError, ServerError } from "@/application/errors"
+import { RequiredFieldError, ServerError, UnauthorizedError } from "@/application/errors"
 import { FacebookLoginController } from "@/application/controllers"
 
 describe('FacebookLoginController', () => {
@@ -57,7 +57,7 @@ it('should return 400 if token is empty', async () => {
 
         expect(httpResponse).toEqual({
             statusCode: 401,
-            data: new AuthenticationError()
+            data: new UnauthorizedError()
         })
     })
 
