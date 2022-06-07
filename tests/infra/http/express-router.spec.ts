@@ -6,7 +6,7 @@ import { mock } from 'jest-mock-extended'
 class ExpressRouter {
     constructor(private readonly controller: Controller) {}
     async adapt (req: Request, res: Response): Promise<void> {
-        await this.controller.handle({...req.body })
+        await this.controller.handle({ ...req.body })
     }
 }
 
@@ -20,5 +20,16 @@ describe('ExpressRouter', () => {
     await sut.adapt(req, res)
 
     expect(controller.handle).toHaveBeenCalledWith({ any: 'any' })
+  })
+
+  it('should call handle with empty request', async () => {
+    const req = getMockReq()
+    const { res } = getMockRes()
+    const controller = mock<Controller>()
+    const sut = new ExpressRouter(controller)
+
+    await sut.adapt(req, res)
+
+    expect(controller.handle).toHaveBeenCalledWith({})
   })
 })
