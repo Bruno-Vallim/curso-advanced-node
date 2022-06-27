@@ -6,7 +6,6 @@ import { PgUser } from '@/infra/postgres/entities'
 import { getConnection } from 'typeorm'
 import { FacebookApi } from '@/infra/apis'
 import { UnauthorizedError } from '@/application/errors'
-import exp from 'constants'
 
 describe('Login Routes', () => {
     describe('POST /login/facebook', () => {
@@ -32,7 +31,7 @@ describe('Login Routes', () => {
     })
 
         it('should return 200 with AccessToken', async () => {
-            loadUserSpy.mockResolvedValueOnce({ facebookId: 'any_id', name: 'any_name', email: 'any_email'})
+            loadUserSpy.mockResolvedValueOnce({ facebookId: 'any_id', name: 'any_name', email: 'any_email' })
 
             const { status, body } = await request(app)
             .post('/api/login/facebook')
