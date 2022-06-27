@@ -1,0 +1,9 @@
+{
+    "type": "postgres",
+    "host": "jelani.db.elephantsql.com",
+    "port": 5432,
+    "username": "cagnnqpv",
+    "password": "zQ5YiCjF6XLs26qFs2AUwbpMUpZOlqpR",
+    "database": "cagnnqpv",
+    "entities": ["dist/infra/postgres/entities/index.js"]
+}
