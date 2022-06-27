@@ -1,5 +1,4 @@
 import { badRequest, HttpResponse } from "@/application/helpers"
-import { FacebookAuthentication } from "@/domain/features"
 import { AccessToken } from "@/domain/entities"
 import { ServerError } from "@/application/errors"
 import { RequiredStringValidator, ValidationBuilder, ValidationComposite, Validator } from "../validation"
