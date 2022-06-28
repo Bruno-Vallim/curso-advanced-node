@@ -1,7 +1,7 @@
 import { HttpResponse } from "@/application/helpers"
 import { getMockReq, getMockRes } from "@jest-mock/express"
-import { RequestHandler } from "express"
-import { mock } from "jest-mock-extended"
+import { NextFunction, RequestHandler, Request, Response } from "express"
+import { mock, MockProxy } from "jest-mock-extended"
 
 type Adapter = (middleware: Middleware) => RequestHandler
 
@@ -14,29 +14,37 @@ interface Middleware {
 }
 
 describe('ExpressMidleware', () => {
-  it('should call handle with correct request', async () => {
-    const req = getMockReq({ headers: { any: 'any' } })
-    const res = getMockRes().res
-    const next = getMockRes().next
-    const middleware = mock<Middleware>()
-    const sut = adaptExpressMidleware(middleware)
+    let req: Request
+    let res: Response
+    let next: NextFunction
+    let middleware: MockProxy<Middleware>
+    let sut: RequestHandler
 
-    await sut(req, res, next)
+    beforeAll(() => {
+        req = getMockReq({ headers: { any: 'any' } })
+        res = getMockRes().res
+        next = getMockRes().next
+        middleware = mock<Middleware>()
+        sut = adaptExpressMidleware(middleware)
+    })
 
-    expect(middleware.handle).toHaveBeenCalledWith({ any: 'any' })
-    expect(middleware.handle).toHaveBeenCalledTimes(1)
-  })
+    beforeEach(() => {
+        sut = adaptExpressMidleware(middleware)
+    })
 
-  it('should call handle with empty request', async () => {
-    const req = getMockReq()
-    const res = getMockRes().res
-    const next = getMockRes().next
-    const middleware = mock<Middleware>()
-    const sut = adaptExpressMidleware(middleware)
+    it('should call handle with correct request', async () => {
+        await sut(req, res, next)
 
-    await sut(req, res, next)
+        expect(middleware.handle).toHaveBeenCalledWith({ any: 'any' })
+        expect(middleware.handle).toHaveBeenCalledTimes(1)
+    })
 
-    expect(middleware.handle).toHaveBeenCalledWith({})
-    expect(middleware.handle).toHaveBeenCalledTimes(1)
-  })
+    it('should call handle with empty request', async () => {
+        const req = getMockReq()
+
+        await sut(req, res, next)
+
+        expect(middleware.handle).toHaveBeenCalledWith({})
+        expect(middleware.handle).toHaveBeenCalledTimes(1)
+    })
 })
