@@ -1,24 +1,8 @@
-import { HttpResponse } from "@/application/helpers"
+import { Middleware } from "@/application/middlewares"
 import { getMockReq, getMockRes } from "@jest-mock/express"
 import { NextFunction, RequestHandler, Request, Response } from "express"
 import { mock, MockProxy } from "jest-mock-extended"
-
-type Adapter = (middleware: Middleware) => RequestHandler
-
-const adaptExpressMidleware: Adapter = middleware => async (req, res, next) => {
-    const { statusCode, data } = await middleware.handle({ ...req.headers })
-    if (statusCode === 200) {
-        const entries = Object.entries(data).filter(entry => entry[1])
-        req.locals = { ...req.locals, ...Object.fromEntries(entries) }
-        next()
-    } else {
-        res.status(statusCode).json(data)
-    }
-}
-
-interface Middleware {
-    handle: (httpRequest: any) => Promise<HttpResponse>
-}
+import { adaptExpressMiddleware } from "@/main/adapters"
 
 describe('ExpressMidleware', () => {
     let req: Request
@@ -32,7 +16,7 @@ describe('ExpressMidleware', () => {
         res = getMockRes().res
         next = getMockRes().next
         middleware = mock<Middleware>()
-        sut = adaptExpressMidleware(middleware)
+        sut = adaptExpressMiddleware(middleware)
         middleware.handle.mockResolvedValue({
             statusCode: 200,
             data: {
@@ -45,7 +29,7 @@ describe('ExpressMidleware', () => {
     })
 
     beforeEach(() => {
-        sut = adaptExpressMidleware(middleware)
+        sut = adaptExpressMiddleware(middleware)
     })
 
     it('should call handle with correct request', async () => {
@@ -93,3 +77,6 @@ describe('ExpressMidleware', () => {
         expect(next).toHaveBeenCalledTimes(1)
     })
 })
+function adaptExpressMidleware(middleware: MockProxy<Middleware>): RequestHandler<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>> {
+    throw new Error("Function not implemented.")
+}
